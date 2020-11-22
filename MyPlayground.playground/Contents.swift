@@ -73,6 +73,7 @@ print(nickAndName); // 완벽.... 신기하다.
 
 // 빈 배열이나 딕셔너리를 선언시에는 ":"을 이용하자...
 
+
 // 옵셔널 변수 선언
 
 //what is nil => wiki
@@ -113,4 +114,3 @@ case let x where x.hasPrefix("blue"):
 default:
     print("I don't know this color");
 }
-
