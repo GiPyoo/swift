@@ -72,3 +72,45 @@ nickAndName["Inha"] = "nina";
 print(nickAndName); // 완벽.... 신기하다.
 
 // 빈 배열이나 딕셔너리를 선언시에는 ":"을 이용하자...
+
+// 옵셔널 변수 선언
+
+//what is nil => wiki
+
+var optionalValue: String? = "Hello";
+print(optionalValue);
+
+optionalValue = nil;
+print(optionalValue);
+
+// 위 방법대로 하니 노란색 경고가 나온다.
+// Expression implicitly coerced from 'String?' to 'Any'
+// 이 표현은 Any 타입으로 강요되었다?
+//왜? => wiki
+// 해결해보자
+
+// ??로 거르기
+print(optionalValue ?? "This is an optional String");
+optionalValue = "Hello";
+print(optionalValue ?? "This is an optional String");
+
+// if문으로 nil 거르기.
+var optionalName: String? = "GiPyo Kim"
+var greeting = "Hello!"
+if let name = optionalValue {
+    greeting = "Hello, \(name)"
+}
+
+// 스위프트의 swich 그리고 where
+
+let color = "blue wine";
+
+switch color {
+case let x where x.hasPrefix("red"):
+    print("\(x) color is too strong");
+case let x where x.hasPrefix("blue"):
+    print("\(x) looks like ocean");
+default:
+    print("I don't know this color");
+}
+
