@@ -256,3 +256,158 @@ print(domappingInt(list: numbers2, map: multipletwo));
 
 let newNumbers = numbers2.map({(number:Int)->Int in number * 2});
 print(newNumbers)
+
+
+// object and class
+
+class Destination {
+    var distance = 0;
+    func leftTo() -> String {
+        return "the distance remaining to destination is \(distance)km.";
+    }
+}
+
+//new 키워드를 쓰지 않아도 생성된다???!!
+var destination = Destination();
+destination.distance = 10;
+var destDescription = destination.leftTo();
+
+
+class Person {
+    var age: Int;
+    var name: String;
+    
+    // constructor가 스위프트에서는 init이다.
+    init(name: String, age: Int) {
+        self.age = age;
+        self.name = name
+    }
+
+    func callMe() -> String {
+        return "Hello. I'm \(name), I'm \(age) years old."
+    }
+}
+
+// 상속이 신기하다..
+class Doctor : Person {
+    var subject: String;
+    
+    init(subject : String,name: String,age : Int) {
+        self.subject = subject;
+        super.init(name: name, age: age);
+    }
+    
+    override func callMe() -> String {
+        return "Hello. I'm \(name), I'm \(age) years old. And I'm Doctor that vets \(subject)"
+    }
+}
+
+let doc = Doctor(subject: "NeuroSurgery", name: "Jason", age: 45);
+doc.callMe();
+
+
+
+class Teacher : Person {
+    var subject: String;
+    var student: String;
+    init(subject : String,name: String,age : Int) {
+        self.subject = subject;
+        self.student = "";
+        super.init(name: name, age: age);
+    }
+    
+    var studentName: String {
+        get {
+            return student;
+        }
+        set{
+            student = "S. " + newValue;
+        }
+    }
+    
+    override func callMe() -> String {
+        return "Hello. I'm \(name), I'm \(age) years old. And I'm Teacher that teach about \(subject)"
+    }
+}
+
+let teacher = Teacher(subject: "Math", name: "Julia", age: 37);
+
+teacher.studentName = "Jacop";
+
+print(teacher.student);
+
+//willSet을 이용해 객체가 생성된 후 생성됬을 때를 예상해서 데이터를 할당 받을 수 있다.
+// 아래클래스들은 swift tour 들을 긁어왔다.
+class Shape{
+    var numberOfSides: Int = 0
+    var name: String
+
+    init(name: String) {
+        self.name = name
+    }
+}
+
+
+class Square: Shape{
+    var sideLength: Double
+    
+    init(sideLength:Double, name: String) {
+        self.sideLength = sideLength;
+        super.init(name: name);
+        numberOfSides = 4;
+    }
+    
+    func area() -> Double {
+        return sideLength * sideLength;
+    }
+}
+
+class EquilateralTriangle: Shape {
+    var sideLength: Double = 0.0
+
+    init(sideLength: Double, name: String) {
+        self.sideLength = sideLength
+        super.init(name: name)
+        numberOfSides = 3
+    }
+
+    var perimeter: Double {
+        get {
+            return 3.0 * sideLength
+        }
+        set {
+            sideLength = newValue / 3.0
+        }
+    }
+}
+
+class TriangleAndSquare {
+    var triangle: EquilateralTriangle {
+        willSet{
+            square.sideLength = newValue.sideLength;
+        }
+    }
+    var square: Square{
+        willSet{
+            triangle.sideLength = newValue.sideLength;
+        }
+    }
+    
+    init(size: Double, name:String) {
+        square = Square(sideLength: size, name: name);
+        triangle = EquilateralTriangle(sideLength: size, name: name);
+    }
+}
+
+
+// 값을 할당할 때바다 값이 바뀌는 것을 확인할 수 있다.
+var triSquare = TriangleAndSquare(size: 10,name:"shape");
+print(triSquare.square.sideLength); //10
+print(triSquare.triangle.sideLength);// 10
+
+triSquare.square = Square(sideLength: 11, name: "another");
+print(triSquare.triangle.sideLength); //11
+
+
+//이런 클래스들 또한 옵셔널로 사용가능하다.
+//특이한 점은 willSet이라는 것의 존재여부다 이를 조금 자세히 공부해봐야겠다.
