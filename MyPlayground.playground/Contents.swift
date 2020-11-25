@@ -411,3 +411,142 @@ print(triSquare.triangle.sideLength); //11
 
 //이런 클래스들 또한 옵셔널로 사용가능하다.
 //특이한 점은 willSet이라는 것의 존재여부다 이를 조금 자세히 공부해봐야겠다.
+
+// Enumerations and Structures
+// enum?은 무엇일까. 내가 생각하는 enum은 순서없는 개체들의 집합으로 알고 있다.
+
+enum Trump : Int{
+    case ace = 1;
+    case two, three, four, fice, six, seven, eight, nine, ten;
+    case jack, queen, king;
+    
+    static let order = [ace, two, three, four, fice, six, seven, eight, nine, ten, jack, queen, king];
+    
+    func explicateSpecialCase() -> String {
+        switch self {
+        case .ace:
+            return "ace";
+        case .jack:
+            return "jack";
+        case .queen:
+            return "queen";
+        case .king:
+            return "king";
+        default:
+            return String(self.rawValue)
+        }
+    }
+}
+
+// rawValue 를 원시값이라 한다. 이것은 무엇일까? => 위키에 정리
+let ace = Trump.ace
+let aceRawValue = ace.rawValue;
+
+if let convertedTrump = Trump(rawValue: 3){
+    let threeD = convertedTrump.explicateSpecialCase();
+    print(threeD);
+}
+
+enum TrumpShape {
+    case spades, hearts, diamonds, clubs;
+    
+    static let order = [spades, diamonds, clubs, hearts];
+    
+    func dsecription() -> String {
+        switch self {
+        case .spades:
+            return "spades";
+        case .hearts:
+            return "hearts";
+        case .diamonds:
+            return "diamonds";
+        case .clubs:
+            return "clubs";
+        }
+    }
+    
+    func color() -> String {
+        switch self {
+        case .clubs:
+            return "black";
+        case .spades:
+            return "black";
+        default:
+            return "red";
+        }
+    }
+}
+
+let hearts = TrumpShape.hearts;
+let hertDescription = hearts.dsecription();
+let heartsColor = hearts.color();
+
+enum ServerResponse {
+    case result(String,String);
+    case failure(String);
+    case pending(String);
+}
+
+let success = ServerResponse.result("6:00 am", "8:09 pm");
+let failure = ServerResponse.failure("Out of cheese.");
+let pending = ServerResponse.pending("20");
+
+switch success {
+case let .result(sunrise, sunset):
+    print("Sunrise is at \(sunrise) and sunset is at \(sunset)");
+case let .failure(message):
+    print("Failure... \(message)");
+case let .pending(waitTime):
+    print("Pending... wait for \(waitTime) seconds");
+}
+
+switch failure {
+case let .result(sunrise, sunset):
+    print("Sunrise is at \(sunrise) and sunset is at \(sunset)");
+case let .failure(message):
+    print("Failure... \(message)");
+case let .pending(waitTime):
+    print("Pending... wait for \(waitTime) seconds");
+}
+
+switch pending {
+case let .result(sunrise, sunset):
+    print("Sunrise is at \(sunrise) and sunset is at \(sunset)");
+case let .failure(message):
+    print("Failure... \(message)");
+case let .pending(waitTime):
+    print("Pending... wait for \(waitTime) seconds");
+}
+
+
+//struct에 대해 알아보자
+// struct는 class와 비슷한 행동을 하고 제공해준다. 메스드와 선언자들을 포함하고 가장 중요한 클래스와의 차이점은 스트럭텨는 항상 카피가 된가는 것이다. 하지만 클래스는 참조 된다.
+struct Card {
+    var trump : Trump;
+    var shape : TrumpShape;
+    
+    func  description() -> String {
+        return "The \(trump.explicateSpecialCase()) of \(shape.dsecription()), it's color is \(shape.color())."
+    }
+}
+
+let threeOfSpades = Card(trump: .three, shape: .spades);
+let threeOfSpadesDescription = threeOfSpades.description();
+
+
+
+func makeDeck() -> [Card] {
+    var oneCardSet : [Card] = [];
+    for (shape) in TrumpShape.order{
+        for (data) in Trump.order{
+            oneCardSet.append(Card(trump: data, shape: shape))
+        }
+    }
+    return oneCardSet;
+}
+
+makeDeck().forEach({(card : Card) -> Void in print(card.description())});
+
+
+
+
