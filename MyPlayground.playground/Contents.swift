@@ -547,7 +547,6 @@ func makeDeck() -> [Card] {
 
 makeDeck().forEach({(card : Card) -> Void in print(card.description())});
 
-
 //protocol? 과 extentionsd
 
 protocol ExampleProtocol {

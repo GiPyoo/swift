@@ -10,4 +10,7 @@
 2. xcode 익히기 (2020. 11. 20 ~)
 3. swift 문법을 배워보자 (2020. 11. 20 ~) [wiki](https://github.com/GiPyoo/swift/wiki/Swift)
 4. 앱을 한 번 만들어보자
-
+
+
+### 앱 기획
+[준비중]
