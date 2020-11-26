@@ -548,5 +548,69 @@ func makeDeck() -> [Card] {
 makeDeck().forEach({(card : Card) -> Void in print(card.description())});
 
 
+//protocol? 과 extentionsd
 
+protocol ExampleProtocol {
+    var simpleDescription: String {get};
+    var simpleNumber: Int {get};
+    mutating func adjust();
+}
 
+class SimpleClass: ExampleProtocol {
+    var simpleDescription: String = "A very simple class"
+    var simpleNumber: Int = 54;
+    var anotherProperty: Int = 24601;
+    func adjust(){
+        simpleDescription += " Now 100% adjusted";
+    }
+}
+
+var a = SimpleClass();
+a.adjust();
+let aDescription = a.simpleDescription;
+
+struct SimpleStructure: ExampleProtocol {
+    var simpleDescription: String = "A simple structure";
+    var simpleNumber: Int = 30;
+    mutating func adjust() {
+        simpleDescription += " (adjusted)"
+    }
+}
+
+var b = SimpleStructure();
+b.adjust();
+let bDescripttion = b.simpleDescription;
+
+// 구조체는 구조체를 변경하기 위해 함수에 mutationg 키워드를 달지만 클래스는 항상 내부를 스스로 수정할 수 있기 때문에 이 키워드가 필요없다.
+// 여기서 프로토콜은 다른 언어의 인터페이스와 비슷한 모습이 있고 구조체에도 적용되는 것 같다.
+
+extension Int: ExampleProtocol{
+    var simpleNumber: Int {
+        return self;
+    }
+    
+    var simpleDescription: String {
+        return "The number \(self)"
+    }
+    //뮤터블 오류가 남 self 자체를 바꾸는 것이 불가능해 보임
+    //바로정수에서 사용은 불가능 다만 변수에 저장한 변수는 가능
+    mutating func adjust() {
+        self += 42;
+    }
+}
+var abc = 7;
+
+abc.adjust();
+7.simpleNumber;
+7.simpleDescription;
+
+let protocolValue: ExampleProtocol = a;
+print(protocolValue.simpleDescription)
+
+extension Double{
+    var absoluteValue: Int{
+        return abs(Int(self));
+    }
+}
+
+-7.9.absoluteValue
