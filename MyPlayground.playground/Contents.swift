@@ -613,3 +613,142 @@ extension Double{
 }
 
 -7.9.absoluteValue
+
+// error handleing
+// 에러 핸들링을 해보자
+// enum 상속이 된다?
+
+enum PrintError: Error {
+    case outOfPaper;
+    case noToner;
+    case onFire;
+}
+
+//toPronter printerName에서 앞은 밖에서 보이는 이름 뒤는 함수 내부에서 사용되는 이름
+func send(job: Int, toPronter printerName: String) throws -> String{
+    if printerName == "Never Has Toner"{
+        throw PrintError.noToner;
+    }
+    return "Job sent";
+}
+
+//try catch가 아닌 do catch를 함 try는 내부 키워드로 사용 됨
+// try는 throws 가 담겨 있는 함수 앞에 사용하여야한다.
+
+do{
+    let printerResponse = try send(job: 1040, toPronter: "Bi Sheng");
+    print(printerResponse);
+} catch{
+    print(error)
+}
+
+do{
+    let printerResponse = try send(job: 1040, toPronter: "Never Has Toner");
+    print(printerResponse);
+} catch{
+    print(error)
+}
+
+do {
+    let printerResponse = try send(job: 1440, toPronter: "Gutenberg");
+    print(printerResponse);
+}catch PrintError.onFire{
+    print("I'll just put this over here, with the rest of the fire.");
+}catch let printerError as PrintError {
+    print("Printer error: \(printerError)");
+} catch{
+    print(error);
+}
+
+// onfire 에러를 날려보았다.
+do {
+    let printerResponse = try send(job: 1440, toPronter: "Gutenberg");
+    throw PrintError.onFire;
+    print(printerResponse);
+}catch PrintError.onFire{
+    print("I'll just put this over here, with the rest of the fire.");
+}catch let printerError as PrintError {
+    print("Printer error: \(printerError)");
+} catch{
+    print(error);
+}
+
+//위 코드를 실행해보면 에러가 걸린 캣치만 동작한다. 이후 캣치는 동작하지 않는다.
+
+// 옵셔널 try? 이것은 에러가 발생할 경우 에러 대신 nil 값을 가지게 한다.
+
+let printerSuccess = try? send(job: 1884, toPronter: "Mergenthaler")
+let printerFailure = try? send(job: 1885, toPronter:"Never Has Toner")
+
+
+var fridgeIsOpen = false;
+let fridgeContent = ["milk","eggs", "leftovers"];
+
+//defer 실행이 끝나기전에 자신 내부 블록의 코드들을 실행 시키는 키워드!
+func fridgeContains(_ food: String) -> Bool {
+    fridgeIsOpen = true
+    defer {
+        fridgeIsOpen = false;
+    }
+    let result = fridgeContent.contains(food)
+    return result;
+}
+
+fridgeContains("banana")
+print(fridgeIsOpen)
+
+// Generics
+
+func makeArray<Item>(repeating item: Item, numberOfTimes:Int) -> [Item]{
+    var result = [Item]();
+    for _ in 0..<numberOfTimes{
+        result.append(item);
+    }
+    return result;
+}
+
+makeArray(repeating: "0", numberOfTimes: 10)
+
+var ddd = [String]();
+print(type(of: ddd))
+
+
+enum OptionalValue<Wrapped> {
+    case none;
+    case some(Wrapped)
+}
+
+var possibleInteger: OptionalValue<Int> = .none;
+possibleInteger = .some(100);
+
+func anyCommonElement<T: Sequence, U:Sequence>(_ lhs:T, _ rhs:U)-> Bool where T.Element: Equatable, T.Element == U.Element {
+    for lhsItem in lhs {
+        for rhsItem in rhs {
+            if(lhsItem == rhsItem){
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+anyCommonElement([1, 2, 3], [3]);
+
+func anyCommonElement2<T: Sequence, U:Sequence>(_ lhs:T, _ rhs:U)-> (()->[T.Element]) where T.Element: Equatable, T.Element == U.Element {
+    var list : [T.Element] = [];
+    func commonValues() -> [T.Element]{
+        for lhsItem in lhs {
+            for rhsItem in rhs {
+                if(lhsItem == rhsItem){
+                    list.append(lhsItem);
+                }
+            }
+        }
+        return list;
+    }
+    
+    return commonValues;
+}
+
+anyCommonElement2([1,2,3],[3])();
+
